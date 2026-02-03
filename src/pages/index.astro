@@ -481,7 +481,7 @@ const appNames = apps.map(app => app.name).sort();
 
   <footer class="site-footer">
     <div class="container">
-      <p>Aggregating {apps.length} apps from Flathub • {metadata.stats.totalReleases} releases tracked</p>
+      <p>Aggregating {apps.length} packages from Project Bluefin • {metadata.stats.totalReleases} releases tracked</p>
       <p>Updated daily • <a href="https://github.com/castrojo/bluefin-releases" target="_blank" rel="noopener">View on GitHub</a></p>
       <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.5rem;">
         Generated {metadata.generatedAt} by {metadata.generatedBy} in {metadata.buildDuration}
@@ -611,8 +611,8 @@ const appNames = apps.map(app => app.name).sort();
         const item = this.items[this.focusedIndex];
         if (!item) return;
         
-        // Open the Flathub link for the focused app card
-        const link = item.querySelector('a[href*="flathub.org"]');
+        // Open the package detail link for the focused app card
+        const link = item.querySelector('a[href*="flathub.org"], a[href*="formulae.brew.sh"]');
         if (link) window.open(link.href, '_blank', 'noopener,noreferrer');
       }
       
