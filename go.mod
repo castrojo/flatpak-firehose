@@ -1,4 +1,4 @@
-module github.com/castrojo/flatpak-firehose
+module github.com/castrojo/bluefin-releases
 
 go 1.21
 

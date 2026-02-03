@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/castrojo/flatpak-firehose/internal/models"
+	"github.com/castrojo/bluefin-releases/internal/models"
 )
 
 const (
