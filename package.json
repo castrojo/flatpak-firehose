@@ -2,7 +2,7 @@
   "name": "bluefin-releases",
   "type": "module",
   "version": "1.0.0",
-  "description": "A release tracker for Bluefin-specific Flatpak apps and Homebrew packages",
+  "description": "Track updates for Bluefin OS, Flatpak applications, and Homebrew packages in one unified dashboard",
   "scripts": {
     "dev": "astro dev",
     "build": "go run cmd/bluefin-releases/main.go && astro build",
@@ -14,9 +14,12 @@
     "url": "git+https://github.com/castrojo/bluefin-releases.git"
   },
   "keywords": [
-    "flathub",
+    "bluefin",
+    "project-bluefin",
     "flatpak",
-    "feed-reader",
+    "homebrew",
+    "release-tracker",
+    "firehose",
     "astro"
   ],
   "author": "castrojo",
