@@ -52,6 +52,14 @@ function getPackageTypeName(type: string): string {
   if (type === 'os') return 'OS Release';
   return 'Flatpak';
 }
+
+// Format version display (OS releases don't need 'v' prefix)
+function formatVersion(version: string, packageType: string): string {
+  if (packageType === 'os') {
+    return version; // OS releases like "stable-20260203" already have a prefix
+  }
+  return `v${version}`; // Other packages get "v1.2.3" format
+}
 ---
 
 <article class="release-card" data-package-type={release.app.packageType}>
@@ -70,7 +78,7 @@ function getPackageTypeName(type: string): string {
         <h3 class="release-name">
           <a href={getPackageUrl(release.app)} target="_blank" rel="noopener">
             {release.app.name}
-            <span class="version-inline">v{release.version}</span>
+            <span class="version-inline">{formatVersion(release.version, release.app.packageType)}</span>
           </a>
         </h3>
         <span class={`package-type-badge ${release.app.packageType}`}>
