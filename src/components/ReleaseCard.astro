@@ -57,6 +57,21 @@ function getPackageTypeName(type: string): string {
 function formatVersion(version: string, packageType: string): string {
   return version;
 }
+
+// Format date for display
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return `${Math.floor(diffDays / 365)} years ago`;
+}
 ---
 
 <article class="release-card" data-package-type={release.app.packageType}>
@@ -78,9 +93,12 @@ function formatVersion(version: string, packageType: string): string {
             <span class="version-inline">{formatVersion(release.version, release.app.packageType)}</span>
           </a>
         </h3>
-        <span class={`package-type-badge ${release.app.packageType}`}>
-          {getPackageTypeName(release.app.packageType)}
-        </span>
+        <div class="release-meta">
+          <span class="release-date">{formatDate(release.date)}</span>
+          <span class={`package-type-badge ${release.app.packageType}`}>
+            {getPackageTypeName(release.app.packageType)}
+          </span>
+        </div>
       </div>
       <p class="release-app-id">{release.app.id}</p>
     </div>
@@ -196,6 +214,19 @@ function formatVersion(version: string, packageType: string): string {
     font-weight: 400;
     color: var(--color-text-secondary);
     margin-left: 0.5rem;
+  }
+
+  .release-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .release-date {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
   }
 
   .package-type-badge {
