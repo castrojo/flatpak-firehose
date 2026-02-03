@@ -142,10 +142,10 @@ function formatDate(dateStr: string) {
   {app.releases && app.releases.length > 0 && (
     <details class="changelog-section">
       <summary class="changelog-header">
-        📝 {app.releases.length} Release{app.releases.length !== 1 ? 's' : ''} Available
+        📝 Latest Release
       </summary>
       <div class="changelog-list">
-        {app.releases.slice(0, 5).map((release: any) => (
+        {app.releases.map((release: any) => (
           <div class="changelog-entry">
             <div class="changelog-meta">
               <span class="changelog-version">{release.version}</span>

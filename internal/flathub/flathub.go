@@ -127,14 +127,12 @@ func enrichApp(flathubApp models.FlathubApp) models.App {
 			app.SourceRepo = sourceRepo
 		}
 
-		// Convert Flathub releases to our format
+		// Convert Flathub releases to our format - only keep the latest one
 		if len(details.Releases) > 0 {
-			app.Releases = ConvertFlathubReleases(details.Releases)
+			app.Releases = ConvertFlathubReleases(details.Releases[:1]) // Only take the first (latest) release
 			// Set current version and release date from first release
-			if len(details.Releases) > 0 {
-				app.Version = details.Releases[0].Version
-				app.ReleaseDate = details.Releases[0].Date
-			}
+			app.Version = details.Releases[0].Version
+			app.ReleaseDate = details.Releases[0].Date
 		}
 	}
 
