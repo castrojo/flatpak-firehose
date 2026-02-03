@@ -31,7 +31,10 @@ Inspired by [castrojo/firehose](https://github.com/castrojo/firehose), with an e
 
 - Go 1.23 or later
 - Node.js 20 or later
-- (Optional) `GITHUB_TOKEN` for GitHub API access
+- (Optional) `GITHUB_TOKEN` for enhanced GitHub API access
+  - Without token: Uses Flathub/Homebrew metadata only
+  - With token: Fetches rich release notes from 10+ GitHub repositories
+  - Get your token at: https://github.com/settings/tokens (read-only access is sufficient)
 
 ### Local Development
 
@@ -56,9 +59,16 @@ npm run dev
 # Without GitHub integration (uses Flathub/Homebrew metadata only)
 go run cmd/bluefin-releases/main.go
 
-# With GitHub integration (fetches actual release notes)
+# With GitHub integration (fetches actual release notes from source repos)
+# Creates a GitHub token at: https://github.com/settings/tokens
+export GITHUB_TOKEN=your_token_here
+go run cmd/bluefin-releases/main.go
+
+# Or in one line:
 GITHUB_TOKEN=your_token_here go run cmd/bluefin-releases/main.go
 ```
+
+**Note:** GitHub token enables rich release notes for 10+ Flatpak apps with detected GitHub repos (Flatseal, adw-gtk3, Ignition, DistroShelf, Warehouse, Dev Toolbox, Embellish, Clapgrep, Bazaar, etc.).
 
 ## Architecture
 
@@ -191,8 +201,15 @@ Workflow (`.github/workflows/deploy.yml`):
 
 ### Environment Variables
 
-- `GITHUB_TOKEN`: Auto-provided by GitHub Actions (no setup needed)
+**GitHub Actions (automatic):**
+- `GITHUB_TOKEN`: Auto-provided by GitHub Actions for API access (already configured in workflow)
 - `BASE_URL`: Set in `astro.config.mjs` for GitHub Pages path
+
+**Local Development (optional):**
+- `GITHUB_TOKEN`: Set manually for enhanced release data
+  - Get token: https://github.com/settings/tokens (read-only access)
+  - Export: `export GITHUB_TOKEN=your_token_here`
+  - Impact: Enables rich changelogs for 10+ apps with GitHub repos
 
 ## Keyboard Shortcuts
 
