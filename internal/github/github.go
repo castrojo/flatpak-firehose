@@ -61,7 +61,9 @@ func EnrichWithGitHubReleases(apps []models.App) []models.App {
 			log.Printf("✅ Added %d GitHub releases for %s", len(releases), app.ID)
 			mu.Unlock()
 
-			// Rate limiting: sleep briefly between requests
+			// Rate limiting: GitHub has a rate limit of 60 requests/hour for unauthenticated
+			// and 5000/hour for authenticated. This conservative sleep helps avoid hitting limits.
+			// In production with GITHUB_TOKEN, this is overly conservative but safe.
 			time.Sleep(500 * time.Millisecond)
 		}(app)
 	}

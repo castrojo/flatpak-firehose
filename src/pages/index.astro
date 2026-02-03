@@ -6,8 +6,36 @@ import appsData from '../data/apps.json';
 
 const baseUrl = import.meta.env.BASE_URL;
 
+// Define types for better type safety
+interface App {
+  id: string;
+  name: string;
+  summary: string;
+  developerName?: string;
+  icon?: string;
+  projectLicense?: string;
+  categories?: string[];
+  currentReleaseVersion?: string;
+  currentReleaseDate?: string;
+  flathubUrl: string;
+  sourceRepo?: {
+    type: string;
+    url: string;
+    owner?: string;
+    repo?: string;
+  };
+  releases?: Array<{
+    version: string;
+    date: string;
+    title: string;
+    description?: string;
+    url?: string;
+    type: string;
+  }>;
+}
+
 // Extract apps from the JSON structure
-const apps = (appsData.apps as any[]) || [];
+const apps = (appsData.apps as App[]) || [];
 const metadata = appsData.metadata;
 
 // Count statistics
