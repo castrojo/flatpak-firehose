@@ -88,11 +88,30 @@ func main() {
 		}
 	}
 
-	// Step 3: Merge Flatpak and Homebrew apps
-	allApps := append(flatpakApps, homebrewApps...)
-	log.Printf("Total apps: %d (%d Flatpak + %d Homebrew)", len(allApps), len(flatpakApps), len(homebrewApps))
+	// Step 3: Fetch Bluefin OS releases (Bluefin mode only)
+	var osApps []models.App
+	osDuration := time.Duration(0)
 
-	// Step 4: Enrich with GitHub releases (from actual source repos)
+	if !*legacyMode {
+		log.Println("Fetching Bluefin OS releases...")
+		osStart := time.Now()
+
+		var err error
+		osApps, err = bluefin.FetchBluefinOSApps()
+		if err != nil {
+			log.Printf("⚠️  Failed to fetch Bluefin OS releases: %v", err)
+		} else {
+			osDuration = time.Since(osStart)
+			log.Printf("Fetched %d Bluefin OS releases in %s", len(osApps), osDuration)
+		}
+	}
+
+	// Step 4: Merge Flatpak, Homebrew, and OS releases
+	allApps := append(flatpakApps, homebrewApps...)
+	allApps = append(allApps, osApps...)
+	log.Printf("Total apps: %d (%d Flatpak + %d Homebrew + %d OS)", len(allApps), len(flatpakApps), len(homebrewApps), len(osApps))
+
+	// Step 5: Enrich with GitHub releases (from actual source repos)
 	log.Println("Enriching with GitHub releases from source repositories...")
 	githubStart := time.Now()
 	enrichedApps := github.EnrichWithGitHubReleases(allApps)
@@ -109,6 +128,7 @@ func main() {
 	totalReleases := 0
 	flatpakCount := 0
 	homebrewCount := 0
+	osCount := 0
 
 	for _, app := range enrichedApps {
 		if app.SourceRepo != nil && app.SourceRepo.Type == "github" {
@@ -122,6 +142,8 @@ func main() {
 			flatpakCount++
 		} else if app.PackageType == "homebrew" {
 			homebrewCount++
+		} else if app.PackageType == "os" {
+			osCount++
 		}
 	}
 
@@ -166,7 +188,7 @@ func main() {
 	// Log final summary
 	log.Printf("✅ Pipeline complete in %s", buildDuration)
 	log.Printf("📊 Output: %s", outputPath)
-	log.Printf("📦 Packages: %d Flatpak + %d Homebrew = %d total", flatpakCount, homebrewCount, len(enrichedApps))
+	log.Printf("📦 Packages: %d Flatpak + %d Homebrew + %d OS = %d total", flatpakCount, homebrewCount, osCount, len(enrichedApps))
 
 	// Write summary as JSON for GitHub Actions
 	summary := map[string]interface{}{
@@ -175,6 +197,7 @@ func main() {
 		"apps_total":          len(enrichedApps),
 		"flatpak_count":       flatpakCount,
 		"homebrew_count":      homebrewCount,
+		"os_count":            osCount,
 		"apps_with_github":    appsWithGitHubRepo,
 		"apps_with_changelog": appsWithChangelogs,
 		"total_releases":      totalReleases,

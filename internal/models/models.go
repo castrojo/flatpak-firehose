@@ -61,8 +61,9 @@ type App struct {
 	IsVerified        bool          `json:"isVerified"`
 	VerificationInfo  *Verification `json:"verificationInfo,omitempty"`
 	AppSet            string        `json:"appSet,omitempty"` // "core" or "dx"
-	PackageType       string        `json:"packageType"`      // "flatpak" or "homebrew"
+	PackageType       string        `json:"packageType"`      // "flatpak", "homebrew", or "os"
 	HomebrewInfo      *HomebrewInfo `json:"homebrewInfo,omitempty"`
+	OSInfo            *OSInfo       `json:"osInfo,omitempty"` // OS release-specific info
 }
 
 // HomebrewInfo contains Homebrew-specific package information
@@ -74,6 +75,18 @@ type HomebrewInfo struct {
 	Versions     []string `json:"versions,omitempty"`     // Available versions
 	Dependencies []string `json:"dependencies,omitempty"` // Package dependencies
 	Caveats      string   `json:"caveats,omitempty"`      // Installation caveats/notes
+}
+
+// OSInfo contains Bluefin OS release-specific information
+type OSInfo struct {
+	Stream        string            `json:"stream"`                  // "stable" or "gts"
+	FedoraVersion string            `json:"fedoraVersion"`           // e.g., "43" or "42"
+	BuildNumber   string            `json:"buildNumber"`             // e.g., "20260203"
+	CommitHash    string            `json:"commitHash,omitempty"`    // Short commit hash
+	KernelVersion string            `json:"kernelVersion,omitempty"` // e.g., "6.17.12-300"
+	GnomeVersion  string            `json:"gnomeVersion,omitempty"`  // e.g., "49.3-2"
+	MesaVersion   string            `json:"mesaVersion,omitempty"`   // e.g., "25.3.4-1"
+	MajorPackages map[string]string `json:"majorPackages,omitempty"` // Other major packages (Podman, Nvidia, etc.)
 }
 
 // Verification contains app verification details from Flathub
