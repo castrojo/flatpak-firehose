@@ -110,8 +110,8 @@ const { categories } = Astro.props;
     let allCards: HTMLElement[] = [];
     
     function initCards() {
-      allCards = Array.from(document.querySelectorAll('.app-card'));
-      console.log(`[FilterBar] Initialized with ${allCards.length} app cards`);
+      allCards = Array.from(document.querySelectorAll('.release-card'));
+      console.log(`[FilterBar] Initialized with ${allCards.length} release cards`);
     }
     
     // Apply all filters
