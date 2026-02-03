@@ -19,5 +19,7 @@ pnpm-debug.log*
 .DS_Store
 
 # Generated data
-src/data/flathub-apps.json
-src/data/app-repos.json
+src/data/apps.json
+
+# Go binary
+flatpak-firehose
