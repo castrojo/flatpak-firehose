@@ -1,6 +1,7 @@
 package flathub
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,6 +18,44 @@ import (
 const (
 	FlathubAPIBase = "https://flathub.org/api/v2"
 )
+
+//go:embed source-overrides.json
+var sourceOverridesJSON []byte
+
+// SourceOverride represents a manual override for source repository detection
+type SourceOverride struct {
+	Type  string `json:"type"`
+	URL   string `json:"url"`
+	Owner string `json:"owner"`
+	Repo  string `json:"repo"`
+	Notes string `json:"notes"`
+}
+
+// SourceOverrides contains the full overrides mapping
+type SourceOverrides struct {
+	Comment   string                    `json:"comment"`
+	Overrides map[string]SourceOverride `json:"overrides"`
+}
+
+var (
+	sourceOverrides     *SourceOverrides
+	sourceOverridesOnce sync.Once
+)
+
+// loadSourceOverrides loads the source overrides from embedded JSON
+func loadSourceOverrides() *SourceOverrides {
+	sourceOverridesOnce.Do(func() {
+		var overrides SourceOverrides
+		if err := json.Unmarshal(sourceOverridesJSON, &overrides); err != nil {
+			log.Printf("Warning: Failed to load source overrides: %v", err)
+			sourceOverrides = &SourceOverrides{Overrides: make(map[string]SourceOverride)}
+			return
+		}
+		sourceOverrides = &overrides
+		log.Printf("Loaded %d source repository overrides", len(overrides.Overrides))
+	})
+	return sourceOverrides
+}
 
 // FetchAllApps fetches apps and enriches with details.
 // If appIDs is provided, fetches only those specific apps.
@@ -170,8 +209,8 @@ func enrichApp(flathubApp models.FlathubApp) models.App {
 	}
 
 	if details != nil {
-		// Extract source repository
-		sourceRepo := ExtractSourceRepo(details)
+		// Extract source repository (with override support)
+		sourceRepo := ExtractSourceRepo(flathubApp.AppID, details)
 		if sourceRepo != nil {
 			app.SourceRepo = sourceRepo
 		}
@@ -250,7 +289,21 @@ func FetchAppDetails(appID string) (*models.FlathubAppDetails, error) {
 }
 
 // ExtractSourceRepo extracts source repository information from app details
-func ExtractSourceRepo(details *models.FlathubAppDetails) *models.SourceRepo {
+// Checks overrides first, then falls back to URL-based detection
+func ExtractSourceRepo(appID string, details *models.FlathubAppDetails) *models.SourceRepo {
+	// Check overrides first
+	overrides := loadSourceOverrides()
+	if override, found := overrides.Overrides[appID]; found {
+		log.Printf("Using source override for %s: %s", appID, override.URL)
+		return &models.SourceRepo{
+			Type:  override.Type,
+			URL:   override.URL,
+			Owner: override.Owner,
+			Repo:  override.Repo,
+		}
+	}
+
+	// Fall back to URL-based detection
 	if details == nil || details.URLs == nil {
 		return nil
 	}

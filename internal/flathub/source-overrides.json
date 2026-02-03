@@ -1,0 +1,201 @@
+{
+  "comment": "Source repository overrides for apps where auto-detection fails or returns incorrect results. Created from Phase 3.1 research (flatpak-repo-research.json).",
+  "overrides": {
+    "org.gnome.Characters": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-characters",
+      "owner": "GNOME",
+      "repo": "gnome-characters",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.SimpleScan": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/simple-scan",
+      "owner": "GNOME",
+      "repo": "simple-scan",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.font-viewer": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-font-viewer",
+      "owner": "GNOME",
+      "repo": "gnome-font-viewer",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.DejaDup": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/World/deja-dup",
+      "owner": "World",
+      "repo": "deja-dup",
+      "notes": "GNOME World app (third-party but GNOME-hosted)"
+    },
+    "org.gnome.SoundRecorder": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-sound-recorder",
+      "owner": "GNOME",
+      "repo": "gnome-sound-recorder",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Snapshot": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/snapshot",
+      "owner": "GNOME",
+      "repo": "snapshot",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Contacts": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-contacts",
+      "owner": "GNOME",
+      "repo": "gnome-contacts",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Connections": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/connections",
+      "owner": "GNOME",
+      "repo": "connections",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.TextEditor": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-text-editor",
+      "owner": "GNOME",
+      "repo": "gnome-text-editor",
+      "notes": "Standard GNOME app hosted on GitLab. Repository is gnome-text-editor, not just text-editor."
+    },
+    "org.gnome.Calculator": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-calculator",
+      "owner": "GNOME",
+      "repo": "gnome-calculator",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Loupe": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/loupe",
+      "owner": "GNOME",
+      "repo": "loupe",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.baobab": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/baobab",
+      "owner": "GNOME",
+      "repo": "baobab",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Builder": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-builder",
+      "owner": "GNOME",
+      "repo": "gnome-builder",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Showtime": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/showtime",
+      "owner": "GNOME",
+      "repo": "showtime",
+      "notes": "Standard GNOME app hosted on GitLab. New video player for GNOME."
+    },
+    "org.gnome.Maps": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-maps",
+      "owner": "GNOME",
+      "repo": "gnome-maps",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Papers": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/evince",
+      "owner": "GNOME",
+      "repo": "evince",
+      "notes": "Papers is the rebranded name for Evince. Repository is still called evince."
+    },
+    "org.gnome.Weather": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-weather",
+      "owner": "GNOME",
+      "repo": "gnome-weather",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Calendar": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-calendar",
+      "owner": "GNOME",
+      "repo": "gnome-calendar",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.Logs": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-logs",
+      "owner": "GNOME",
+      "repo": "gnome-logs",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "org.gnome.FileRoller": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/file-roller",
+      "owner": "GNOME",
+      "repo": "file-roller",
+      "notes": "Standard GNOME app hosted on GitLab. Archive manager."
+    },
+    "org.gnome.clocks": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-clocks",
+      "owner": "GNOME",
+      "repo": "gnome-clocks",
+      "notes": "Standard GNOME app hosted on GitLab"
+    },
+    "com.mattjakeman.ExtensionManager": {
+      "type": "github",
+      "url": "https://github.com/mjakeman/extension-manager",
+      "owner": "mjakeman",
+      "repo": "extension-manager",
+      "notes": "Third-party app by Matt Jakeman for managing GNOME Shell extensions"
+    },
+    "it.mijorus.smile": {
+      "type": "github",
+      "url": "https://github.com/mijorus/smile",
+      "owner": "mijorus",
+      "repo": "smile",
+      "notes": "Third-party emoji picker app"
+    },
+    "page.tesk.Refine": {
+      "type": "gitlab",
+      "url": "https://gitlab.gnome.org/TheEvilSkeleton/Refine",
+      "owner": "TheEvilSkeleton",
+      "repo": "Refine",
+      "notes": "Third-party tweaking tool hosted on GNOME GitLab"
+    },
+    "com.github.PintaProject.Pinta": {
+      "type": "github",
+      "url": "https://github.com/PintaProject/Pinta",
+      "owner": "PintaProject",
+      "repo": "Pinta",
+      "notes": "Image editor similar to Paint.NET"
+    },
+    "io.podman_desktop.PodmanDesktop": {
+      "type": "github",
+      "url": "https://github.com/containers/podman-desktop",
+      "owner": "containers",
+      "repo": "podman-desktop",
+      "notes": "Desktop app for managing Podman containers"
+    },
+    "io.missioncenter.MissionCenter": {
+      "type": "gitlab",
+      "url": "https://gitlab.com/mission-center-devs/mission-center",
+      "owner": "mission-center-devs",
+      "repo": "mission-center",
+      "notes": "System monitor app similar to Windows Task Manager. Hosted on GitLab.com."
+    },
+    "io.gitlab.adhami3310.Impression": {
+      "type": "gitlab",
+      "url": "https://gitlab.com/adhami3310/Impression",
+      "owner": "adhami3310",
+      "repo": "Impression",
+      "notes": "USB image writer tool. Hosted on GitLab.com."
+    }
+  }
+}
