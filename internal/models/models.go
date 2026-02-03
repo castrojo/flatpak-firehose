@@ -145,6 +145,7 @@ type FlathubAppDetails struct {
 	Name        string                `json:"name"`
 	Summary     string                `json:"summary"`
 	Description string                `json:"description"`
+	Icon        string                `json:"icon"`
 	URLs        map[string]string     `json:"urls"`
 	Releases    []FlathubReleaseEntry `json:"releases"`
 }

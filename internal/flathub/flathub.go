@@ -118,6 +118,11 @@ func enrichApp(flathubApp models.FlathubApp) models.App {
 		description = details.Description
 	}
 
+	icon := flathubApp.Icon
+	if icon == "" && details != nil {
+		icon = details.Icon
+	}
+
 	// Build categories array from main and sub categories
 	categories := []string{}
 	// MainCategories is now a StringOrArray, append all elements
@@ -151,7 +156,7 @@ func enrichApp(flathubApp models.FlathubApp) models.App {
 		Summary:           summary,
 		Description:       description,
 		DeveloperName:     flathubApp.DeveloperName,
-		Icon:              flathubApp.Icon,
+		Icon:              icon,
 		ProjectLicense:    flathubApp.ProjectLicense,
 		Categories:        categories,
 		UpdatedAt:         updatedAt,
