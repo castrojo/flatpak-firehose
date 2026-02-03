@@ -388,7 +388,10 @@ const appNames = apps.map(app => app.name).sort();
         <div style="display: flex; align-items: center; gap: 2rem; flex: 1;">
           <div>
             <h1 class="site-title">
-              <a href={baseUrl} id="home-link" class="home-link">🔥 Bluefin Firehose</a>
+              <a href={baseUrl} id="home-link" class="home-link">
+                <img src="/bluefin-logo.svg" alt="Bluefin logo" style="width: 32px; height: 32px; display: inline-block; vertical-align: middle; margin-right: 0.5rem;" />
+                Bluefin Firehose
+              </a>
             </h1>
             <p class="site-subtitle">Track updates for Bluefin OS, Flatpak apps, and Homebrew packages</p>
           </div>
