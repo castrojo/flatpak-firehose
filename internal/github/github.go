@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/castrojo/bluefin-releases/internal/markdown"
 	"github.com/castrojo/bluefin-releases/internal/models"
 	"github.com/google/go-github/v57/github"
 	"golang.org/x/oauth2"
@@ -99,7 +100,7 @@ func fetchGitHubReleases(ctx context.Context, client *github.Client, owner, repo
 
 		description := ""
 		if gr.Body != nil {
-			description = *gr.Body
+			description = markdown.ToHTML(*gr.Body)
 		}
 
 		url := ""

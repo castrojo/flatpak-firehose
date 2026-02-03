@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/castrojo/bluefin-releases/internal/markdown"
 	"github.com/castrojo/bluefin-releases/internal/models"
 )
 
@@ -103,22 +104,9 @@ func FetchBluefinReleases() ([]models.Release, error) {
 }
 
 // parseReleaseNotes formats release notes for display
-// This is a simple implementation that can be enhanced later
+// Converts markdown to HTML for proper rendering in the UI
 func parseReleaseNotes(body string) string {
-	// For now, just return the body as-is
-	// Future enhancements could:
-	// - Extract key highlights
-	// - Remove excessive formatting
-	// - Limit length
-	// - Parse markdown to plain text
-
-	// Limit length to avoid massive descriptions
-	maxLength := 1000
-	if len(body) > maxLength {
-		return body[:maxLength] + "..."
-	}
-
-	return body
+	return markdown.ToHTML(body)
 }
 
 // FetchBluefinOSApps fetches Bluefin OS releases and converts them to App objects

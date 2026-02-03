@@ -13,6 +13,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/castrojo/bluefin-releases/internal/markdown"
 	"github.com/castrojo/bluefin-releases/internal/models"
 )
 
@@ -168,7 +169,7 @@ func fetchGitLabReleases(ctx context.Context, token, repoURL, owner, repo string
 			title = gr.Name
 		}
 
-		description := gr.Description
+		description := markdown.ToHTML(gr.Description)
 
 		// Build release URL
 		releaseURL := fmt.Sprintf("%s/-/releases/%s", strings.TrimSuffix(repoURL, ".git"), gr.TagName)
