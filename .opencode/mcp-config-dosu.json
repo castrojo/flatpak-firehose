@@ -1,0 +1,51 @@
+{
+  "name": "dosu",
+  "description": "Dosu MCP server for accessing organization knowledge base",
+  "transport": "remote",
+  "url": "https://api.dosu.dev/v1/mcp",
+  "headers": {
+    "X-Deployment-ID": "83775020-c22e-485a-a222-987b2f5a3823"
+  },
+  "auth": {
+    "type": "oauth2",
+    "note": "OAuth 2.0 with Dynamic Client Registration. OpenCode will prompt for browser-based authentication on first use."
+  },
+  "tools": [
+    {
+      "name": "init_knowledge",
+      "description": "Search Dosu knowledge store for task-relevant information. Use this at the start of any task to get context from Dosu-generated documentation, answers, and topics."
+    },
+    {
+      "name": "search_documentation",
+      "description": "Search across documentation, Confluence pages, GitHub wikis, and knowledge base articles. Use this to find how-to guides, API references, and architectural decisions."
+    },
+    {
+      "name": "search_threads",
+      "description": "Search through GitHub issues, discussions, Slack conversations, and other threaded discussions. Use this to find past solutions, bug reports, and team decisions."
+    },
+    {
+      "name": "fetch_source",
+      "description": "Retrieve the full content of a source by its source_id. Use this after searching to get complete details when the summary isn't enough."
+    },
+    {
+      "name": "save_topic",
+      "description": "Save an important topic to the knowledge base for future reference. Use this to capture key discoveries that can help your team later."
+    },
+    {
+      "name": "greet",
+      "description": "Test the MCP connection and verify everything is working."
+    }
+  ],
+  "setup_instructions": {
+    "step1": "Add this configuration to ~/.config/opencode/opencode.json under the 'mcpServers' key",
+    "step2": "Restart OpenCode to load the new MCP server",
+    "step3": "On first use, OpenCode will prompt for OAuth authentication via browser",
+    "step4": "Test the connection by asking OpenCode to use the 'greet' tool",
+    "example_usage": [
+      "Search Dosu for documentation about feature X",
+      "Find past GitHub issues related to bug Y",
+      "Look for Slack conversations about deployment Z"
+    ]
+  },
+  "reference": "https://app.dosu.dev/9affd04a-e6a9-452c-b927-c639e979994c/documents/8c21ef6e-14b7-4fa1-949e-d256af54bad1"
+}
