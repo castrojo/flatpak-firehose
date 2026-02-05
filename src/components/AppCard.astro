@@ -140,7 +140,26 @@ function getPackageTypeName(type: string): string {
         )}
       </div>
       <div class="app-id-row">
-        <p class="app-id">{app.id}</p>
+        <div class="app-id-section">
+          <p class="app-id">{app.id}</p>
+          {app.packageType === 'flatpak' && app.flathubUrl && (
+            <a 
+              href={`https://flathub.org/apps/${app.id}`} 
+              target="_blank" 
+              rel="noopener"
+              class="flathub-badge-link"
+              title="Install from Flathub"
+            >
+              <img 
+                src="https://flathub.org/api/badge?locale=en&light" 
+                alt="Download on Flathub" 
+                width="160"
+                height="56"
+                class="flathub-badge"
+              />
+            </a>
+          )}
+        </div>
         <div class="meta-badges">
           <span class={`package-type-badge ${app.packageType}`}>
             {getPackageTypeName(app.packageType)}
@@ -326,7 +345,7 @@ function getPackageTypeName(type: string): string {
   }
 
   .version-inline {
-    font-size: 0.875rem;
+    font-size: 1.125rem;
     font-weight: 400;
     color: var(--color-text-secondary);
     margin-left: 0.5rem;
@@ -368,6 +387,14 @@ function getPackageTypeName(type: string): string {
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .app-id-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .meta-badges {
@@ -402,7 +429,25 @@ function getPackageTypeName(type: string): string {
     font-size: 0.75rem;
     color: var(--color-text-secondary);
     margin: 0;
+    margin-top: 0.25rem;
     font-family: monospace;
+  }
+
+  .flathub-badge-link {
+    display: inline-block;
+    line-height: 0;
+    opacity: 0.85;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .flathub-badge-link:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+
+  .flathub-badge {
+    height: auto;
+    vertical-align: middle;
   }
 
   .package-type-badge {
