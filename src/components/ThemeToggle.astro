@@ -75,27 +75,8 @@
 </style>
 
 <script>
-  // @ts-nocheck
-  // Theme toggle logic
-  const themeToggle = document.getElementById('theme-toggle');
+  import { initTheme } from '../scripts/theme';
   
-  themeToggle?.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    // Announce to screen readers
-    const announcement = `Switched to ${newTheme} mode`;
-    const liveRegion = document.getElementById('kbd-live-region');
-    if (liveRegion) {
-      liveRegion.textContent = announcement;
-    }
-  });
-  
-  // Expose toggle function for keyboard shortcut
-  window.toggleTheme = () => {
-    themeToggle?.click();
-  };
+  // Initialize theme toggle
+  initTheme();
 </script>
