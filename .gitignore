@@ -21,8 +21,9 @@ pnpm-debug.log*
 # Generated data
 src/data/apps.json
 
-# Go binary
+# Go binaries
 flatpak-firehose
+rss-poc
 
 # bv (beads viewer) local config and caches
 .bv/
