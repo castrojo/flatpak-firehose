@@ -1,0 +1,34 @@
+{
+  "name": "linux-diagnostics",
+  "description": "Linux system diagnostics MCP server for monitoring and troubleshooting",
+  "transport": "stdio",
+  "command": "/home/linuxbrew/.linuxbrew/bin/linux-mcp-server",
+  "args": [],
+  "env": {
+    "LINUX_MCP_USER": "${USER}"
+  },
+  "capabilities": [
+    "System monitoring (CPU, memory, disk usage)",
+    "Process management and inspection",
+    "Network diagnostics",
+    "Log file access and analysis",
+    "Service status checks",
+    "System configuration inspection"
+  ],
+  "setup_instructions": {
+    "prerequisite": "Ensure linux-mcp-server is installed via Homebrew: brew install linux-mcp-server",
+    "verify_installation": "which linux-mcp-server",
+    "step1": "Add this configuration to ~/.config/opencode/opencode.json under the 'mcpServers' key",
+    "step2": "Restart OpenCode to load the new MCP server",
+    "step3": "Test the connection by asking OpenCode to check system resources",
+    "example_usage": [
+      "Check current CPU and memory usage",
+      "Show running processes sorted by memory",
+      "Check disk space on all mounted filesystems",
+      "View recent system logs",
+      "Check status of systemd services"
+    ]
+  },
+  "source": "Copied from ~/.config/goose/config.yaml (linuxtools extension)",
+  "version": "1.2.1"
+}
