@@ -212,21 +212,11 @@ function getPackageTypeName(type: string): string {
   )}
 
   {app.sourceRepo && (
-    <div class="source-repo">
-      <a href={app.sourceRepo.url} target="_blank" rel="noopener" class="repo-link">
-        <span class="repo-icon">
-          {app.sourceRepo.type === 'github' && <i class="fab fa-github"></i>}
-          {app.sourceRepo.type === 'gitlab' && <i class="fab fa-gitlab"></i>}
-          {app.sourceRepo.type !== 'github' && app.sourceRepo.type !== 'gitlab' && <i class="fas fa-code-branch"></i>}
-        </span>
-        <span class="repo-text">
-          {app.sourceRepo.type === 'github' 
-            ? `${app.sourceRepo.owner}/${app.sourceRepo.repo}`
-            : 'Source Repository'
-          }
-        </span>
-      </a>
-    </div>
+    <a href={app.sourceRepo.url} target="_blank" rel="noopener" class="source-repo-icon" title={app.sourceRepo.type === 'github' ? `${app.sourceRepo.owner}/${app.sourceRepo.repo}` : 'Source Repository'}>
+      {app.sourceRepo.type === 'github' && <i class="fab fa-github"></i>}
+      {app.sourceRepo.type === 'gitlab' && <i class="fab fa-gitlab"></i>}
+      {app.sourceRepo.type !== 'github' && app.sourceRepo.type !== 'gitlab' && <i class="fas fa-code-branch"></i>}
+    </a>
   )}
 
   {app.releases && app.releases.length > 0 && app.releases[0].description && (
@@ -344,7 +334,7 @@ function getPackageTypeName(type: string): string {
   }
 
   .app-name a:hover {
-    color: var(--color-primary);
+    color: var(--color-text-link);
   }
 
   .verified-badge {
@@ -387,7 +377,7 @@ function getPackageTypeName(type: string): string {
 
   .package-type-badge.flatpak {
     background: rgba(88, 166, 255, 0.15);
-    color: var(--color-primary);
+    color: var(--color-text-link);
     border: 1px solid rgba(88, 166, 255, 0.3);
   }
 
@@ -440,49 +430,28 @@ function getPackageTypeName(type: string): string {
 
   .category-tag {
     background: rgba(88, 166, 255, 0.1);
-    color: var(--color-primary);
+    color: var(--color-text-link);
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
     font-size: 0.75rem;
     border: 1px solid rgba(88, 166, 255, 0.2);
   }
 
-  .source-repo {
-    display: flex;
+  .source-repo-icon {
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem;
-    background: rgba(88, 166, 255, 0.05);
-    border: 1px solid rgba(88, 166, 255, 0.2);
-    border-radius: 6px;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 1.125rem;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
     margin-bottom: 1rem;
   }
 
-  .repo-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-primary);
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-family: monospace;
-    flex: 1;
-  }
-
-  .repo-link:hover {
-    text-decoration: underline;
-  }
-
-  .repo-icon {
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 1.25rem;
-  }
-
-  .repo-text {
-    flex: 1;
+  .source-repo-icon:hover {
+    opacity: 1;
+    color: var(--color-text-link);
   }
 
   .changelog-section {
@@ -524,7 +493,7 @@ function getPackageTypeName(type: string): string {
   }
 
   .changelog-link {
-    color: var(--color-primary);
+    color: var(--color-text-link);
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 500;
@@ -544,7 +513,7 @@ function getPackageTypeName(type: string): string {
     background: rgba(88, 166, 255, 0.1);
     border: 1px solid rgba(88, 166, 255, 0.3);
     border-radius: 6px;
-    color: var(--color-primary);
+    color: var(--color-text-link);
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 600;

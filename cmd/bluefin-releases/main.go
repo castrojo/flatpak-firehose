@@ -17,6 +17,46 @@ import (
 
 const version = "1.0.0"
 
+// deduplicateReleases removes appstream releases when actual repo releases (GitHub/GitLab/Mozilla) exist
+// This prevents duplicate entries for the same version showing different dates
+func deduplicateReleases(apps []models.App) []models.App {
+	for i := range apps {
+		app := &apps[i]
+
+		// Skip if no releases
+		if len(app.Releases) == 0 {
+			continue
+		}
+
+		// Check if there are any non-appstream releases
+		hasRepoReleases := false
+		for _, release := range app.Releases {
+			if release.Type == "github-release" || release.Type == "gitlab-release" || release.Type == "mozilla-release" {
+				hasRepoReleases = true
+				break
+			}
+		}
+
+		// If we have repo releases, filter out appstream releases
+		if hasRepoReleases {
+			filteredReleases := []models.Release{}
+			removedCount := 0
+			for _, release := range app.Releases {
+				if release.Type == "appstream" {
+					removedCount++
+					continue
+				}
+				filteredReleases = append(filteredReleases, release)
+			}
+			app.Releases = filteredReleases
+			if removedCount > 0 {
+				log.Printf("Removed %d appstream release(s) from %s (has repo releases)", removedCount, app.ID)
+			}
+		}
+	}
+	return apps
+}
+
 func main() {
 	// Parse command-line flags
 	legacyMode := flag.Bool("legacy", false, "Use legacy mode (fetch recently updated apps instead of Bluefin list)")
@@ -133,6 +173,13 @@ func main() {
 	enrichedApps = mozilla.EnrichWithMozillaReleases(enrichedApps)
 	mozillaDuration := time.Since(mozillaStart)
 	log.Printf("Mozilla enrichment complete in %s", mozillaDuration)
+
+	// Step 5.7: Deduplicate releases (remove appstream releases when actual repo releases exist)
+	log.Println("Deduplicating releases (removing appstream releases when repo releases exist)...")
+	dedupeStart := time.Now()
+	enrichedApps = deduplicateReleases(enrichedApps)
+	dedupeDuration := time.Since(dedupeStart)
+	log.Printf("Release deduplication complete in %s", dedupeDuration)
 
 	// Step 5: Sort by update date (Flatpak apps have updatedAt, Homebrew may not)
 	// For now, just use the order they come in (Flatpak first, then Homebrew)
