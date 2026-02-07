@@ -98,8 +98,24 @@ apps.forEach(app => {
   }
 });
 
+// Filter out beta/alpha releases
+function isBetaOrAlphaRelease(title: string): boolean {
+  const lowerTitle = title.toLowerCase();
+  return (
+    lowerTitle.includes('beta') ||
+    lowerTitle.includes('alpha') ||
+    lowerTitle.includes('.rc') ||
+    lowerTitle.includes('-rc') ||
+    lowerTitle.includes(' rc') ||
+    lowerTitle.includes('dev')
+  );
+}
+
+// Filter out beta/alpha releases
+const stableReleases = allReleases.filter(release => !isBetaOrAlphaRelease(release.title));
+
 // Sort releases by date (newest first)
-allReleases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+stableReleases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 // Group releases by app (project)
 interface AppGroup {
@@ -110,7 +126,7 @@ interface AppGroup {
 }
 
 const releasesByApp = new Map<string, AppGroup>();
-allReleases.forEach(release => {
+stableReleases.forEach(release => {
   const appKey = release.app.id;
   
   if (!releasesByApp.has(appKey)) {
