@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ReleaseCard from '../components/ReleaseCard.astro';
+import GroupedReleaseCard from '../components/GroupedReleaseCard.astro';
 import FeaturedAppBanner from '../components/FeaturedAppBanner.astro';
 import FilterBar from '../components/FilterBar.astro';
 
@@ -101,37 +101,33 @@ apps.forEach(app => {
 // Sort releases by date (newest first)
 allReleases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-// Group releases by date
-interface DateGroup {
-  date: string;
-  displayDate: string;
-  releases: ReleaseWithApp[];
+// Group releases by app (project)
+interface AppGroup {
+  appId: string;
+  appName: string;
+  mainRelease: ReleaseWithApp;
+  olderReleases: ReleaseWithApp[];
 }
 
-const releasesByDate = new Map<string, DateGroup>();
+const releasesByApp = new Map<string, AppGroup>();
 allReleases.forEach(release => {
-  const date = new Date(release.date);
-  const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD
-  const displayDate = date.toLocaleDateString('en-US', { 
-    weekday: 'long',
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  });
+  const appKey = release.app.id;
   
-  if (!releasesByDate.has(dateKey)) {
-    releasesByDate.set(dateKey, {
-      date: dateKey,
-      displayDate,
-      releases: []
+  if (!releasesByApp.has(appKey)) {
+    releasesByApp.set(appKey, {
+      appId: release.app.id,
+      appName: release.app.name,
+      mainRelease: release,
+      olderReleases: []
     });
+  } else {
+    releasesByApp.get(appKey)!.olderReleases.push(release);
   }
-  releasesByDate.get(dateKey)!.releases.push(release);
 });
 
-// Convert to array and sort by date (newest first)
-const groupedReleases = Array.from(releasesByDate.values())
-  .sort((a, b) => b.date.localeCompare(a.date));
+// Convert to array and sort by main release date (newest first)
+const groupedReleases = Array.from(releasesByApp.values())
+  .sort((a, b) => new Date(b.mainRelease.date).getTime() - new Date(a.mainRelease.date).getTime());
 
 // Count statistics
 const appsWithGitHub = apps.filter(app => app.sourceRepo && app.sourceRepo.type === 'github').length;
@@ -237,16 +233,15 @@ const appNames = apps.map(app => app.name).sort();
     <!-- Main content area -->
     <div class="main-content">
       <div class="releases-timeline">
-        {groupedReleases.map((dateGroup) => (
-          <div class="date-group">
-            <h2 class="date-header">{dateGroup.displayDate}</h2>
-            <div class="releases-list">
-              {dateGroup.releases.map((release) => (
-                <ReleaseCard release={release} />
-              ))}
-            </div>
-          </div>
-        ))}
+        <h2 class="timeline-header">Recent Releases</h2>
+        <div class="releases-list">
+          {groupedReleases.map((group) => (
+            <GroupedReleaseCard 
+              mainRelease={group.mainRelease} 
+              olderReleases={group.olderReleases} 
+            />
+          ))}
+        </div>
       </div>
     </div>
   </div>
@@ -358,29 +353,18 @@ const appNames = apps.map(app => app.name).sort();
     .releases-timeline {
       display: flex;
       flex-direction: column;
-      gap: 2.5rem;
+      gap: 1rem;
       margin-bottom: 3rem;
       max-width: 100%;
     }
 
-    .date-group {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .date-header {
+    .timeline-header {
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--color-text-primary);
-      margin: 0;
+      margin: 0 0 1.5rem 0;
       padding-bottom: 0.75rem;
       border-bottom: 2px solid var(--color-border-default);
-      position: sticky;
-      top: 0;
-      background: var(--color-bg-secondary);
-      z-index: 10;
-      backdrop-filter: blur(8px);
     }
 
     .releases-list {

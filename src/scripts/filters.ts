@@ -284,7 +284,7 @@ export const initFilters = (container: HTMLElement): void => {
   
   // Get all cards
   const getAllCards = (): HTMLElement[] => 
-    Array.from(document.querySelectorAll('.release-card'));
+    Array.from(document.querySelectorAll('.grouped-release-card, .release-card'));
   
   // Get current filter state
   const getFilterState = (): FilterState => ({
