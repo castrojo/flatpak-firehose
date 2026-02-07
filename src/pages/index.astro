@@ -117,33 +117,42 @@ const stableReleases = allReleases.filter(release => !isBetaOrAlphaRelease(relea
 // Sort releases by date (newest first)
 stableReleases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-// Group releases by app (project)
+// Group releases by app while preserving date order
+// The first occurrence of each app becomes the main release
+// Subsequent releases for that app become older releases
 interface AppGroup {
   appId: string;
   appName: string;
   mainRelease: ReleaseWithApp;
   olderReleases: ReleaseWithApp[];
+  firstSeenDate: Date;
 }
 
 const releasesByApp = new Map<string, AppGroup>();
+const groupedReleasesInOrder: AppGroup[] = [];
+
 stableReleases.forEach(release => {
   const appKey = release.app.id;
   
   if (!releasesByApp.has(appKey)) {
-    releasesByApp.set(appKey, {
+    // First time seeing this app - this is the main release (newest)
+    const group: AppGroup = {
       appId: release.app.id,
       appName: release.app.name,
       mainRelease: release,
-      olderReleases: []
-    });
+      olderReleases: [],
+      firstSeenDate: new Date(release.date)
+    };
+    releasesByApp.set(appKey, group);
+    groupedReleasesInOrder.push(group);
   } else {
+    // Already seen this app - add to older releases
     releasesByApp.get(appKey)!.olderReleases.push(release);
   }
 });
 
-// Convert to array and sort by main release date (newest first)
-const groupedReleases = Array.from(releasesByApp.values())
-  .sort((a, b) => new Date(b.mainRelease.date).getTime() - new Date(a.mainRelease.date).getTime());
+// groupedReleasesInOrder is already in date order (newest first)
+const groupedReleases = groupedReleasesInOrder;
 
 // Count statistics
 const appsWithGitHub = apps.filter(app => app.sourceRepo && app.sourceRepo.type === 'github').length;
