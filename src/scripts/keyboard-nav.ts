@@ -51,11 +51,16 @@ const addFocusClass = (item: HTMLElement): void => {
 // Side effect: Scroll to item
 const scrollToItem = (item: HTMLElement): void => {
   const headerHeight = document.querySelector('.site-header')?.clientHeight || 0;
-  const itemTop = item.getBoundingClientRect().top + window.pageYOffset;
-  const scrollTo = itemTop - headerHeight - 16; // 16px padding
+  
+  // Get absolute position in document
+  const itemRect = item.getBoundingClientRect();
+  const absoluteTop = itemRect.top + window.scrollY;
+  
+  // Scroll so item appears at top of viewport (below header) with small breathing room
+  const targetScrollY = absoluteTop - headerHeight - 8;
   
   window.scrollTo({
-    top: scrollTo,
+    top: targetScrollY,
     behavior: 'smooth',
   });
 };
