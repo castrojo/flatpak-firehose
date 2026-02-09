@@ -116,6 +116,12 @@ func fetchTapDirectory(owner, repo, directory, pkgType string, experimental bool
 		return []models.App{}, nil
 	}
 
+	if resp.StatusCode == 403 || resp.StatusCode == 429 {
+		// Rate limited - log warning and continue with partial results
+		log.Printf("⚠️  Rate limited by GitHub API for %s/%s/%s, continuing with partial results", owner, repo, directory)
+		return []models.App{}, nil
+	}
+
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
@@ -229,16 +235,33 @@ func parseRubyFormula(content string) FormulaMetadata {
 	}
 
 	// Extract version: version "..."
+	// Try explicit version first
 	versionRe := regexp.MustCompile(`version\s+"([^"]+)"`)
 	if match := versionRe.FindStringSubmatch(content); len(match) > 1 {
 		metadata.Version = match[1]
+	} else {
+		// Fallback: extract from url or sha256 lines
+		// Matches patterns like: /v1.2.3/ or -1.2.3. or _1.2.3
+		urlRe := regexp.MustCompile(`url\s+"[^"]*[/-]v?(\d+\.\d+\.\d+)`)
+		if match := urlRe.FindStringSubmatch(content); len(match) > 1 {
+			metadata.Version = match[1]
+		}
 	}
 
 	// Extract GitHub repo from url: patterns
 	// Matches: github.com/owner/repo or github.com:owner/repo
+	// Prioritize package source repos, skip tap repos
 	githubRe := regexp.MustCompile(`github\.com[/:]([^/\s"]+)/([^/\s"\.]+)`)
-	if match := githubRe.FindStringSubmatch(content); len(match) > 2 {
-		metadata.GitHubRepo = fmt.Sprintf("%s/%s", match[1], match[2])
+	matches := githubRe.FindAllStringSubmatch(content, -1)
+	for _, match := range matches {
+		if len(match) > 2 {
+			repo := fmt.Sprintf("%s/%s", match[1], match[2])
+			// Skip if it's a tap repo itself (contains "homebrew-")
+			if !strings.Contains(repo, "homebrew-") {
+				metadata.GitHubRepo = repo
+				break
+			}
+		}
 	}
 
 	return metadata
