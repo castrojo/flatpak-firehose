@@ -50,20 +50,11 @@ const addFocusClass = (item: HTMLElement): void => {
 
 // Side effect: Scroll to item
 const scrollToItem = (item: HTMLElement): void => {
-  const headerHeight = document.querySelector('.site-header')?.clientHeight || 0;
-  
-  // Get absolute position in document
-  const itemRect = item.getBoundingClientRect();
-  const absoluteTop = itemRect.top + window.scrollY;
-  
-  // Scroll so item appears at top of viewport (below header) with small breathing room
-  const targetScrollY = absoluteTop - headerHeight - 8;
-  
-  // Use instant scroll for vim-like behavior - smooth scroll causes race conditions
-  // when user rapidly presses j/k keys (getBoundingClientRect() samples mid-animation)
-  window.scrollTo({
-    top: targetScrollY,
+  // Use scrollIntoView with block: 'start' to align card to top of viewport
+  // This is the standard way to align elements to the top of the browser window
+  item.scrollIntoView({
     behavior: 'instant',
+    block: 'start',
   });
 };
 
