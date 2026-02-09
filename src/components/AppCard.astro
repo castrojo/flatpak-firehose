@@ -14,6 +14,7 @@ interface AppProps {
   installsLastMonth?: number;
   favoritesCount?: number;
   isVerified?: boolean;
+  experimental?: boolean;
   verificationInfo?: {
     method: string;
     loginName?: string;
@@ -131,6 +132,11 @@ function getPackageTypeName(type: string): string {
           {app.isVerified && (
             <span class="verified-badge" title={`Verified via ${app.verificationInfo?.method}`}>
               ✓
+            </span>
+          )}
+          {app.experimental && (
+            <span class="experimental-badge" title="Experimental package - may be unstable">
+              ⚠️ Experimental
             </span>
           )}
         </h2>
@@ -601,5 +607,26 @@ function getPackageTypeName(type: string): string {
     background: rgba(74, 144, 226, 0.2);
     border-color: rgba(74, 144, 226, 0.5);
     transform: translateX(2px);
+  }
+
+  .experimental-badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    background: rgba(255, 193, 7, 0.15);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #ffa726;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .experimental-badge {
+      background: rgba(255, 193, 7, 0.2);
+      border-color: rgba(255, 193, 7, 0.5);
+      color: #ffb74d;
+    }
   }
 </style>
