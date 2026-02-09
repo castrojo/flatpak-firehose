@@ -6,7 +6,7 @@ test.describe('RSS Feeds', () => {
   const rssFeeds = [
     { path: '/rss.xml', name: 'All Releases', shouldHaveItems: true },
     { path: '/rss/flatpak.xml', name: 'Flatpak Releases', shouldHaveItems: true },
-    { path: '/rss/homebrew.xml', name: 'Homebrew Releases', shouldHaveItems: false }, // Currently no releases
+    { path: '/rss/homebrew.xml', name: 'Homebrew Releases', shouldHaveItems: 'optional' }, // Has releases only with GITHUB_TOKEN
     { path: '/rss/os.xml', name: 'OS Releases', shouldHaveItems: true },
     { path: '/rss/verified.xml', name: 'Verified Apps', shouldHaveItems: false }, // Currently no verified apps
   ];
@@ -54,7 +54,7 @@ test.describe('RSS Feeds', () => {
         expect(content).toContain('Bluefin Firehose');
       });
 
-      if (feed.shouldHaveItems) {
+      if (feed.shouldHaveItems === true) {
         test(`${feed.name} feed has items`, async ({ page }) => {
           const response = await page.goto(`${baseUrl}${feed.path}`);
           const content = await response!.text();
@@ -75,6 +75,20 @@ test.describe('RSS Feeds', () => {
             expect(content).toContain('<link>');
             expect(content).toContain('<pubDate>');
             expect(content).toContain('<description>');
+          }
+        });
+      } else if (feed.shouldHaveItems === 'optional') {
+        test(`${feed.name} feed may have items (depends on GITHUB_TOKEN)`, async ({ page }) => {
+          const response = await page.goto(`${baseUrl}${feed.path}`);
+          const content = await response!.text();
+          
+          // Feed may or may not have items - just verify it's valid
+          expect(content).toContain('<channel>');
+          
+          // If there are items, verify they have required fields
+          if (content.includes('<item>')) {
+            expect(content).toContain('<title>');
+            expect(content).toContain('<pubDate>');
           }
         });
       } else {
