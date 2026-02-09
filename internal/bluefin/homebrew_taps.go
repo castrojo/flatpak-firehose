@@ -211,3 +211,35 @@ func parseTapPackage(owner, repo, directory, filename, pkgName, pkgType string, 
 
 	return app, nil
 }
+
+// parseRubyFormula extracts metadata from .rb file using regex
+func parseRubyFormula(content string) FormulaMetadata {
+	metadata := FormulaMetadata{}
+
+	// Extract description: desc "..."
+	descRe := regexp.MustCompile(`desc\s+"([^"]+)"`)
+	if match := descRe.FindStringSubmatch(content); len(match) > 1 {
+		metadata.Description = match[1]
+	}
+
+	// Extract homepage: homepage "..."
+	homepageRe := regexp.MustCompile(`homepage\s+"([^"]+)"`)
+	if match := homepageRe.FindStringSubmatch(content); len(match) > 1 {
+		metadata.Homepage = match[1]
+	}
+
+	// Extract version: version "..."
+	versionRe := regexp.MustCompile(`version\s+"([^"]+)"`)
+	if match := versionRe.FindStringSubmatch(content); len(match) > 1 {
+		metadata.Version = match[1]
+	}
+
+	// Extract GitHub repo from url: patterns
+	// Matches: github.com/owner/repo or github.com:owner/repo
+	githubRe := regexp.MustCompile(`github\.com[/:]([^/\s"]+)/([^/\s"\.]+)`)
+	if match := githubRe.FindStringSubmatch(content); len(match) > 2 {
+		metadata.GitHubRepo = fmt.Sprintf("%s/%s", match[1], match[2])
+	}
+
+	return metadata
+}
