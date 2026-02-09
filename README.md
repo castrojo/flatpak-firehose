@@ -8,6 +8,9 @@ Bluefin Firehose aggregates release information from three sources into one stre
 - **Bluefin OS releases** from the ublue-os/bluefin repository
 - **Flatpak applications** curated by Project Bluefin (42 apps from system Brewfiles)
 - **Homebrew packages** from Bluefin's CLI, AI, K8s, and IDE tool collections (44 packages)
+- **ublue-os tap packages** from ublue-os/homebrew-tap and experimental-tap (41 packages)
+
+**Total: ~137 packages tracked**
 
 This creates a comprehensive view of all software updates relevant to Bluefin OS users.
 
@@ -118,18 +121,23 @@ The data pipeline runs in three parallel phases:
    - Filters for Linux-compatible packages
    - Extracts GitHub repos for release tracking
 
-4. **GitHub Enrichment** (`internal/github/github.go`)
+4. **ublue-os Tap Packages** (`internal/bluefin/homebrew_taps.go`)
+   - Discovers packages from ublue-os/homebrew-tap and experimental-tap
+   - Fetches .rb files from GitHub and parses metadata
+   - Marks experimental packages with flag
+
+5. **GitHub Enrichment** (`internal/github/github.go`)
    - Fetches actual release notes from detected GitHub repos
    - Rate-limited and concurrent (respects GitHub API limits)
    - Falls back gracefully when token unavailable
 
-5. **GitLab Enrichment** (`internal/gitlab/gitlab.go`)
+6. **GitLab Enrichment** (`internal/gitlab/gitlab.go`)
    - Fetches actual release notes from detected GitLab repos
    - Supports both gitlab.com and self-hosted GitLab instances
    - Rate-limited and concurrent (respects GitLab API limits)
    - Falls back to public API when token unavailable
 
-**Output:** `src/data/apps.json` (96 packages total)
+**Output:** `src/data/apps.json` (137 packages total)
 
 ### Astro Frontend (`src/pages/index.astro`)
 
@@ -153,6 +161,7 @@ bluefin-releases/
 │   ├── bluefin/
 │   │   ├── flatpak.go           # Bluefin Flatpak fetcher
 │   │   ├── homebrew.go          # Bluefin Homebrew fetcher
+│   │   ├── homebrew_taps.go     # ublue-os tap fetcher
 │   │   └── releases.go          # Bluefin OS releases fetcher
 │   ├── flathub/
 │   │   └── flathub.go           # Flathub API client
@@ -268,6 +277,14 @@ From Bluefin's Homebrew tool collections:
 - **AI/ML Tools**: `system_files/shared/usr/share/ublue-os/homebrew/ai-tools.Brewfile`
 - **K8s Tools**: `system_files/shared/usr/share/ublue-os/homebrew/k8s-tools.Brewfile`
 - **IDE Tools**: `system_files/shared/usr/share/ublue-os/homebrew/ide.Brewfile`
+
+### ublue-os Homebrew Taps (41 packages)
+
+From ublue-os custom Homebrew taps:
+- **ublue-os/homebrew-tap** (16 packages): VSCode, JetBrains Toolbox, LM Studio, 1Password, wallpaper packs
+- **ublue-os/homebrew-experimental-tap** (25 packages): Individual JetBrains IDEs, Cursor, Rancher Desktop, system tools
+
+Experimental tap packages are marked with a ⚠️ warning badge indicating they may be unstable.
 
 ### Bluefin OS Releases (10 total)
 
