@@ -1,6 +1,6 @@
 # Agent Instructions
 
-This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
+This project uses @obra/superpowers
 
 ## Project Overview
 
@@ -13,16 +13,6 @@ This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get sta
 **Total: ~137 packages tracked**
 
 The project uses a **hybrid architecture**: Go backend for data aggregation + Astro frontend for static site generation.
-
-## Quick Reference
-
-```bash
-bd ready              # Find available work
-bd show <id>          # View issue details
-bd update <id> --status in_progress  # Claim work
-bd close <id>         # Complete work
-bd sync               # Sync with git
-```
 
 ## Architecture
 
@@ -213,7 +203,7 @@ The site deploys automatically via GitHub Actions (`.github/workflows/deploy.yml
 
 ## Feature Completion Validation Protocol
 
-**CRITICAL**: Before closing ANY beads issue or marking work complete, you MUST follow this protocol. Multiple issues have been falsely marked complete without actual implementation.
+**CRITICAL**: Before closing ANY issue or marking work complete, you MUST follow this protocol. Multiple issues have been falsely marked complete without actual implementation.
 
 ### The Problem: False Completions
 
@@ -226,7 +216,7 @@ Past failures have occurred due to:
 
 ### Mandatory Validation Checklist
 
-**FOR EVERY FEATURE/FIX** you implement, complete this checklist **BEFORE** closing the beads issue:
+**FOR EVERY FEATURE/FIX** you implement, complete this checklist **BEFORE** closing the issue:
 
 #### 1. Implementation Verification
 ```bash
@@ -290,8 +280,6 @@ git show HEAD                # Review actual changes
 ```
 <action> <what> - <brief why>
 
-Fixes <beads-issue-id>
-
 <detailed description of changes>
 - Bullet point changes
 - With file names and line numbers where helpful
@@ -306,20 +294,18 @@ Verification:
 **❌ FAIL**: Megacommit with multiple features, vague message → **Split into atomic commits**
 
 #### 6. Issue Closure
-```bash
-# Close issue with verification evidence
-bd close <issue-id> --reason "Completed <feature>. Verified: build passes, grep confirms changes in <files>, visual check confirms feature appears in <location>. Commit: <commit-hash>"
-```
 
-**✅ PASS**: Issue closed with evidence of completion  
-**❌ FAIL**: Closed with vague reason like "done" → **Reopen and add verification**
+Document completion with clear evidence in commit message and issue tracker:
+
+**✅ PASS**: Issue closed with evidence of completion in commit message  
+**❌ FAIL**: Closed with vague message like "done" → **Reopen and add verification**
 
 ### Examples of Proper vs Improper Completion
 
 #### ❌ IMPROPER (DO NOT DO THIS):
 ```bash
 # Make some changes (maybe)
-bd close issue-123 --reason "Added Flathub badge to components"
+git commit -m "Added Flathub badge to components"
 # No build check, no grep, no visual verification
 # Issue closed but feature is actually missing from ReleaseCard!
 ```
@@ -344,8 +330,6 @@ npm run preview  # ✅ Badge appears on both card types
 git add src/components/ReleaseCard.astro
 git commit -m "Add Flathub install badge to ReleaseCard component
 
-Fixes bluefin-releases-hhy
-
 - Add badge HTML and CSS to ReleaseCard
 - Matches AppCard implementation
 - Only shows for packageType === 'flatpak'
@@ -354,9 +338,6 @@ Verification:
 - Build succeeds
 - grep confirms badge in both AppCard and ReleaseCard
 - Visual check: badge appears in Recent Releases view"
-
-# 6. Close with evidence
-bd close bluefin-releases-hhy --reason "Completed. Build passes, grep confirms flathub-badge in ReleaseCard.astro:154, AppCard.astro:151. Visual check confirms badge appears. Commit: 3e8bf1b"
 ```
 
 ### Red Flags That Indicate False Completion
@@ -378,11 +359,9 @@ Immediately reopen an issue if:
 4. **No commit** - Issue closed but no git commit exists for the feature
 5. **Wrong commit** - Commit message claims feature but `git show` doesn't show the actual code
 
-**Example reopen command:**
-```bash
-bd reopen issue-123
-bd update issue-123 --notes "Reopened: Feature claimed complete but grep shows missing from ReleaseCard.astro. AppCard has it (line 151) but ReleaseCard does not. Need to add badge HTML+CSS to ReleaseCard."
-```
+**When reopening:**
+Document in issue tracker why it was reopened:
+- "Reopened: Feature claimed complete but grep shows missing from ReleaseCard.astro. AppCard has it (line 151) but ReleaseCard does not. Need to add badge HTML+CSS to ReleaseCard."
 
 ### Root Cause: Why Validations Were Skipped
 
@@ -414,7 +393,6 @@ Understanding why false completions happen:
 4. **PUSH TO REMOTE** - This is MANDATORY:
    ```bash
    git pull --rebase
-   bd sync
    git push
    git status  # MUST show "up to date with origin"
    ```
